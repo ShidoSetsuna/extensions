@@ -1,5 +1,104 @@
-/// <reference path="./anime-torrent-provider.d.ts" />
+// AnimeTosho Custom Provider - Standalone Version
+// All type definitions included inline
 
+// Type definitions
+type AnimeProviderSmartSearchFilter = "batch" | "episodeNumber" | "resolution" | "query" | "bestReleases"
+type AnimeProviderType = "main" | "special"
+
+interface AnimeProviderSettings {
+    canSmartSearch: boolean
+    smartSearchFilters: AnimeProviderSmartSearchFilter[]
+    supportsAdult: boolean
+    type: AnimeProviderType
+}
+
+interface Media {
+    id: number
+    idMal?: number
+    status?: string
+    format?: string
+    englishTitle?: string
+    romajiTitle?: string
+    episodeCount?: number
+    absoluteSeasonOffset?: number
+    synonyms: string[]
+    isAdult: boolean
+    startDate?: FuzzyDate
+}
+
+interface FuzzyDate {
+    year: number
+    month?: number
+    day?: number
+}
+
+interface AnimeSearchOptions {
+    media: Media
+    query: string
+}
+
+interface AnimeSmartSearchOptions {
+    media: Media
+    query: string
+    batch: boolean
+    episodeNumber: number
+    resolution: string
+    anidbAID: number
+    anidbEID: number
+    bestReleases: boolean
+}
+
+interface AnimeTorrent {
+    name: string
+    date: string
+    size: number
+    formattedSize: string
+    seeders: number
+    leechers: number
+    downloadCount: number
+    link: string
+    downloadUrl?: string
+    magnetLink?: string
+    infoHash?: string
+    resolution?: string
+    isBatch?: boolean
+    episodeNumber: number
+    releaseGroup?: string
+    isBestRelease: boolean
+    confirmed: boolean
+}
+
+// AnimeTosho API response type
+type ToshoTorrent = {
+    id: number
+    title: string
+    link: string
+    timestamp: number
+    status: string
+    tosho_id?: number
+    nyaa_id?: number
+    nyaa_subdom?: any
+    anidex_id?: number
+    torrent_url: string
+    info_hash: string
+    info_hash_v2?: string
+    magnet_uri: string
+    seeders: number
+    leechers: number
+    torrent_download_count: number
+    tracker_updated?: any
+    nzb_url?: string
+    total_size: number
+    num_files: number
+    anidb_aid: number
+    anidb_eid: number
+    anidb_fid: number
+    article_url: string
+    article_title: string
+    website_url: string
+}
+
+// Main Provider Class
 class Provider {
     api = "https://feed.animetosho.org/json"
 
@@ -14,7 +113,7 @@ class Provider {
 
     async search(opts: AnimeSearchOptions): Promise<AnimeTorrent[]> {
         const query = `?q=${encodeURIComponent(opts.query)}&only_tor=1`
-        console.log("AnimeTosho search query:", query)
+        console.log("AnimeTosho Custom search query:", query)
         const torrents = await this.fetchTorrents(query)
         return torrents.map(t => this.toAnimeTorrent(t))
     }
@@ -164,34 +263,4 @@ class Provider {
             confirmed: true,
         }
     }
-}
-
-// AnimeTosho API response type
-type ToshoTorrent = {
-    id: number
-    title: string
-    link: string
-    timestamp: number
-    status: string
-    tosho_id?: number
-    nyaa_id?: number
-    nyaa_subdom?: any
-    anidex_id?: number
-    torrent_url: string
-    info_hash: string
-    info_hash_v2?: string
-    magnet_uri: string
-    seeders: number
-    leechers: number
-    torrent_download_count: number
-    tracker_updated?: any
-    nzb_url?: string
-    total_size: number
-    num_files: number
-    anidb_aid: number
-    anidb_eid: number
-    anidb_fid: number
-    article_url: string
-    article_title: string
-    website_url: string
 }
