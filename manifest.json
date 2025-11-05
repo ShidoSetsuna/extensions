@@ -1,0 +1,16 @@
+{
+  "id": "animetosho-provider",
+  "name": "AnimeTosho Provider",
+  "version": "1.0.0",
+  "manifestVersion": "1.0.0",
+  "description": "AnimeTosho torrent provider with smart search, resolution filtering, batch support, and language filtering",
+  "author": "Shido Setsuna",
+  "type": "anime-torrent-provider",
+  "language": "typescript",
+  "main": "animetosho-provider.ts",
+  "icon": "",
+  "files": [
+    "anime-torrent-provider.d.ts",
+    "animetosho-provider.ts"
+  ]
+}
